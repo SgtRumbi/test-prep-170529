@@ -72,7 +72,7 @@ LogSquareMatrix(int32 **Matrix, int32 ElementsCount) {
         for(int32 Horizontal = 0;
             Horizontal < ElementsCount;
             ++Horizontal) {
-            Print("%3d ", Matrix[Vertical][Horizontal]);
+            Print("%d ", Matrix[Vertical][Horizontal]);
         }
         Print("\n");
     }
@@ -256,8 +256,8 @@ Dijkstra(graph Graph, node *StartNode, node *EndNode) {
         for(int32 NodeIterator = 0;
             NodeIterator < Graph.NodeCount;
             ++NodeIterator) {
-            if(!Visited[NodeIterator] && Graph.Matrix[NodeIndex][NodeIterator]) {
-                int32 NewDistance = Distances[CurrentMinNodeIndex] + Graph.Matrix[NodeIndex][NodeIterator];
+            if(!Visited[NodeIterator] && Graph.Matrix[CurrentMinNodeIndex][NodeIterator]) {
+                int32 NewDistance = Distances[CurrentMinNodeIndex] + Graph.Matrix[CurrentMinNodeIndex][NodeIterator];
                 if(NewDistance < Distances[NodeIterator]) {
                     Distances[NodeIterator] = NewDistance;
                     Previous[NodeIterator] = CurrentMinNodeIndex;
@@ -280,13 +280,16 @@ Dijkstra(graph Graph, node *StartNode, node *EndNode) {
             Print("%s(%d) does not have a predecessor.\n", Graph.Nodes[NodeIterator].Name, NodeIterator);
         }
     }
-    Print("Distance to target: %d\nStarting at end node: %s(%d)", Distances[EndNodeIndex], Graph.Nodes[EndNodeIndex].Name, EndNodeIndex);
+    Print("Starting at end node: %s(%d)", Graph.Nodes[EndNodeIndex].Name, EndNodeIndex);
     int32 CurrentNodeIndex = EndNodeIndex;
+    int32 Sum = 0;
     while(CurrentNodeIndex != StartNodeIndex) {
+        Sum += Graph.Matrix[CurrentNodeIndex][Previous[CurrentNodeIndex]];
         CurrentNodeIndex = Previous[CurrentNodeIndex];
         Print("<-%s(%d)", Graph.Nodes[CurrentNodeIndex].Name, CurrentNodeIndex);
     }
-    Print("\nFinished Dijkstra-way-search.");
+    Print("\nDistance to target: %d / %d\n", Distances[EndNodeIndex], Sum);
+    Print("Finished Dijkstra-way-search.");
 }
 
 internal void
@@ -326,16 +329,13 @@ main() {
     LogConnections(Graph);
 
     Line();
-
-    BreadthFirstSearch(Graph, A);
+    BreadthFirstSearch(Graph, B);
+    Line();
+    DepthFirstSearch(Graph, B);
 
     Line();
 
-    DepthFirstSearch(Graph, A);
-
-    Line();
-
-    Dijkstra(Graph, A, F);
+    Dijkstra(Graph, C, E);
 
     return(0);
 }
