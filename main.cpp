@@ -17,6 +17,10 @@
 #include <queue>
 #include <climits>
 
+#include <X11/X.h>
+#include <EGL/egl.h>
+#include <cstring>
+
 // Definitions
 typedef unsigned int uint32;
 typedef signed int int32;
@@ -336,6 +340,31 @@ main() {
     Line();
 
     Dijkstra(Graph, C, E);
+
+    Display *XDisplay;
+    Window XWindow;
+    XEvent CurrentXEvent;
+    int32 Screen;
+
+    XDisplay = XOpenDisplay(NULL);
+    if(!XDisplay) {
+        Print("Failed to open X-window!\n");
+    }
+
+    const char *Message = "Hello, World!";
+    Screen = DefaultScreen(XDisplay);
+    XWindow = XCreateSimpleWindow(XDisplay, RootWindow(XDisplay, Screen), 10, 10, 100, 100, 1, BlackPixel(XDisplay, Screen), WhitePixel(XDisplay, Screen));
+    XSelectInput(XDisplay, XWindow, ExposureMask | KeyPressMask);
+    XMapWindow(XDisplay, XWindow);
+    while(1) {
+        XNextEvent(XDisplay, &CurrentXEvent);
+        if(CurrentXEvent.type == Expose) {
+            XFillRectangle(XDisplay, XWindow, DefaultGC(XDisplay, Screen), 20, 20, 10, 1);
+            XDrawString(XDisplay, XWindow, DefaultGC(XDisplay, Screen), 10, 50, Message, strlen(Message));
+        } else if(CurrentXEvent.type == KeyPress) {
+            break;
+        }
+    }
 
     return(0);
 }
