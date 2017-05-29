@@ -238,12 +238,9 @@ Dijkstra(graph Graph, node *StartNode, node *EndNode) {
         int32 CurrentMinNodeIndex = -1;
 
         // Get nearest node
-        // For all nodes
         for(int32 NodeToCheck = 0;
             NodeToCheck < Graph.NodeCount;
             ++NodeToCheck) {
-            // If the node was not visited an the distance from the NodeIndex-node + NodeToCheck-node-distance is less
-            // than the CurrentMinDistance -> Set it.
             int32 CurrentDistance = Distances[NodeToCheck];
 
             Print("Current distance between %s(%d) and %s(%d) is %d.\n", Graph.Nodes[NodeIndex].Name, NodeIndex,
@@ -253,8 +250,6 @@ Dijkstra(graph Graph, node *StartNode, node *EndNode) {
                 CurrentMinNodeIndex = NodeToCheck;
             }
         }
-
-        // Assert(CurrentMinNodeIndex != -1);
 
         Visited[CurrentMinNodeIndex] = true;
 
