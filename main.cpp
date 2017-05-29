@@ -188,7 +188,7 @@ BreadthFirstSearch(graph Graph, node *StartNode) {
                 Visited[NodeToVisit] = true;
                 Queue.push(NodeToVisit);
 
-                node Node = Graph.Nodes[NodeToVisit];bool32 Visited[Graph.NodeCount];
+                node Node = Graph.Nodes[NodeToVisit];
 
                 Print("Visited node %s(%d)\n", Node.Name, Node.OwnIndex);
             }
